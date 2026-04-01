@@ -1,0 +1,43 @@
+[project]
+name = "scraper"
+version = "0.1.0"
+description = "Web scraper adaptativo para inmobiliarias"
+readme = "README.md"
+authors = [
+    { name = "lhuachl", email = "lllhuachlll@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.44",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.0",
+    "httpx>=0.27",
+    "toml>=0.10",
+    "apscheduler>=3.10",
+    "groq>=0.9",
+    "pytest>=9.0.2",
+]
+
+[project.scripts]
+scraper = "scraper.runner:main"
+
+[build-system]
+requires = ["maturin>=1.6,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "scraper._scraper_core"
+python-source = "."
+
+[tool.uv]
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = "src/**/*.rs" },
+    { file = "Cargo.toml" },
+    { file = "Cargo.lock" },
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

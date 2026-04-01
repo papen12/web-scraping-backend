@@ -1,0 +1,26 @@
+# ── Índice de reglas del scraper inmobiliario ─────────────────────────────────
+#
+# Cada [[regla]] define:
+#   nombre   = identificador único
+#   archivo  = ruta relativa al .scm (desde este directorio)
+#   fuente   = nombre del sitio (omitir para regla global)
+#   activa   = true/false
+#   confianza = 0.0–1.0
+
+[[regla]]
+nombre    = "leaflet"
+archivo   = "base/leaflet.scm"
+activa    = true
+confianza = 0.8
+
+[[regla]]
+nombre    = "gmaps"
+archivo   = "base/gmaps.scm"
+activa    = true
+confianza = 0.8
+
+[[regla]]
+nombre    = "precio"
+archivo   = "base/precio.scm"
+activa    = true
+confianza = 0.7

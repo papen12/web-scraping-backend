@@ -1,0 +1,137 @@
+# ── Índice de sitios inmobiliarios a scrapear ─────────────────────────────────
+#
+# Cada [[sitio]] define:
+#   nombre  = identificador único (se usa como fuente en el esquema)
+#   url     = URL de entrada al sitio
+#   pais    = código ISO del país
+#   activo  = true/false para activar/desactivar sin borrar
+#   tags    = etiquetas para filtrar (ej: "portal", "inmobiliaria", "directorio")
+#   notas   = observaciones libres
+
+# ── Portales grandes ─────────────────────────────────────────────────────────
+
+[[sitio]]
+nombre = "infocasas"
+url    = "https://www.infocasas.com.bo/"
+pais   = "BO"
+activo = true
+tags   = ["portal", "listados"]
+notas  = "Portal grande, listados paginados, probablemente JS pesado"
+
+[[sitio]]
+nombre = "buscocasita"
+url    = "https://bolivia.buscocasita.com/"
+pais   = "BO"
+activo = true
+tags   = ["portal", "listados"]
+notas  = "Subdominio Bolivia de BuscoCasita"
+
+[[sitio]]
+nombre = "toqueeltimbre"
+url    = "https://toqueeltimbre.com/"
+pais   = "BO"
+activo = true
+tags   = ["portal", "listados"]
+notas  = "Portal boliviano"
+
+[[sitio]]
+nombre = "slideprop"
+url    = "https://bolivia.slideprop.com/"
+pais   = "BO"
+activo = true
+tags   = ["portal", "listados"]
+notas  = "Subdominio Bolivia de SlideProp"
+
+# ── Franquicias internacionales ──────────────────────────────────────────────
+
+[[sitio]]
+nombre = "remax"
+url    = "https://www.remax.com.bo/"
+pais   = "BO"
+activo = true
+tags   = ["franquicia", "listados"]
+notas  = "RE/MAX Bolivia — sitio corporativo con listados"
+
+[[sitio]]
+nombre = "century21"
+url    = "https://c21.com.bo/"
+pais   = "BO"
+activo = true
+tags   = ["franquicia", "listados"]
+notas  = "Century 21 Bolivia"
+
+[[sitio]]
+nombre = "alfa"
+url    = "https://www.alfabolivia.com/"
+pais   = "BO"
+activo = true
+tags   = ["franquicia", "listados"]
+notas  = "Alfa Inmobiliaria Bolivia"
+
+# ── Inmobiliarias locales ────────────────────────────────────────────────────
+
+[[sitio]]
+nombre = "jhely"
+url    = "https://jhely.com/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "JHELY Bolivia"
+
+[[sitio]]
+nombre = "santacruz_br"
+url    = "https://santacruzbienesraices.com/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local", "santa-cruz"]
+notas  = "Santa Cruz Bienes Raíces"
+
+[[sitio]]
+nombre = "bolivian_re"
+url    = "https://bolivianrealestate.com.bo/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "Bolivian Real Estate"
+
+[[sitio]]
+nombre = "bienesraicesbo"
+url    = "https://bienesraicesbo.com/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "Bienes Raíces Bolivia"
+
+[[sitio]]
+nombre = "vision"
+url    = "https://www.vision.com.bo/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "Vision Bienes Raíces"
+
+[[sitio]]
+nombre = "procasa"
+url    = "https://procasabolivia.com/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "ProCasa Bolivia"
+
+[[sitio]]
+nombre = "casadepto"
+url    = "http://www.casadepto.com/"
+pais   = "BO"
+activo = true
+tags   = ["inmobiliaria", "local"]
+notas  = "CASADEPTO — HTTP (sin TLS)"
+
+# ── Directorios ──────────────────────────────────────────────────────────────
+
+[[sitio]]
+nombre = "ultracasas"
+url    = "https://www.ultracasas.com/inmobiliarias"
+pais   = "BO"
+activo = true
+tags   = ["directorio", "listados"]
+notas  = "UltraCasas — directorio de inmobiliarias, no listados directos"
