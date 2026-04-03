@@ -8,6 +8,7 @@ Si el monolito no responde:
   4. Al final del batch reporta cuántas se guardaron localmente
 
 Reintentos con backoff exponencial en 5xx o timeout.
+Body configurable via body_mapping.toml.
 """
 
 from __future__ import annotations
@@ -15,11 +16,13 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 import time
 from pathlib import Path
 from typing import Any
 
 import httpx
+import toml as toml_lib
 
 from scraper.config import settings
 from scraper.schema import Propiedad
@@ -29,6 +32,73 @@ logger = logging.getLogger(__name__)
 MAX_RETRIES = 3
 BASE_BACKOFF = 1.0
 CIRCUIT_OPEN_SECONDS = 60  # No reintentar monolito por 60s tras fallo
+
+
+# ── Body mapping ─────────────────────────────────────────────────────────────
+
+def _cargar_body_mapping() -> tuple[dict[str, str], dict[str, str]]:
+    """Carga el mapeo de body desde body_mapping.toml."""
+    mapping_path = settings.body_mapping_abs_path
+    if not mapping_path.exists():
+        return {}, {}
+    try:
+        data = toml_lib.load(str(mapping_path))
+        return data.get("mapping", {}), data.get("defaults", {})
+    except Exception as e:
+        logger.warning("Error cargando body_mapping.toml: %s", e)
+        return {}, {}
+
+
+def transformar_body(propiedad: Propiedad) -> dict[str, Any]:
+    """
+    Transforma una Propiedad al formato que espera el monolito,
+    según body_mapping.toml.
+
+    Si no existe body_mapping.toml, devuelve el model_dump estándar.
+
+    Soporta:
+      - "campo_origen": copia directa del campo
+      - "{campo1}-{campo2}": template con interpolación
+      - "": campo vacío (se usa default si existe)
+    """
+    mapping, defaults = _cargar_body_mapping()
+
+    if not mapping:
+        # Sin mapping → enviar esquema canónico completo
+        return propiedad.model_dump(mode="json")
+
+    # Dict plano de todos los campos de la propiedad
+    prop_data = propiedad.model_dump(mode="json")
+    body: dict[str, Any] = {}
+
+    for dest_field, source_expr in mapping.items():
+        if not source_expr:
+            # Campo sin mapeo → usar default o null
+            body[dest_field] = defaults.get(dest_field)
+            continue
+
+        if "{" in source_expr and "}" in source_expr:
+            # Template con interpolación: "{operacion}-{tipo}-{ciudad}"
+            try:
+                value = source_expr
+                for match in re.finditer(r"\{(\w+)\}", source_expr):
+                    campo = match.group(1)
+                    reemplazo = prop_data.get(campo, "")
+                    value = value.replace(
+                        f"{{{campo}}}",
+                        str(reemplazo) if reemplazo is not None else "",
+                    )
+                body[dest_field] = value
+            except Exception:
+                body[dest_field] = defaults.get(dest_field)
+        else:
+            # Campo directo
+            value = prop_data.get(source_expr)
+            if value is None and dest_field in defaults:
+                value = defaults[dest_field]
+            body[dest_field] = value
+
+    return body
 
 
 class ClienteMonolito:
@@ -134,9 +204,9 @@ class ClienteMonolito:
             return False
 
     async def _post_monolito(self, propiedad: Propiedad) -> bool:
-        """POST con reintentos y backoff."""
+        """POST con reintentos y backoff. Body configurable via body_mapping.toml."""
         url = f"{settings.monolito_url.rstrip('/')}/propiedades"
-        payload = propiedad.model_dump(mode="json")
+        payload = transformar_body(propiedad)
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             for intento in range(MAX_RETRIES):
@@ -243,3 +313,8 @@ class ClienteMonolito:
 
 # Singleton
 cliente = ClienteMonolito()
+
+
+async def enviar_propiedad(propiedad: Propiedad) -> bool:
+    """Convenience wrapper para enviar una propiedad via el singleton."""
+    return await cliente.enviar(propiedad)

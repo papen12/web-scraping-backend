@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     sitios_path: str = "sitios.toml"
     fallback_dir: str = "output/pendientes"
     navegacion_timeout: int = 45_000  # ms
+    body_mapping_path: str = "body_mapping.toml"
 
     model_config = {
         "env_prefix": "",
@@ -43,6 +44,10 @@ class Settings(BaseSettings):
     @property
     def sitios_abs_path(self) -> Path:
         return PROJECT_ROOT / self.sitios_path
+
+    @property
+    def body_mapping_abs_path(self) -> Path:
+        return PROJECT_ROOT / self.body_mapping_path
 
 
 # Singleton para uso global

@@ -16,6 +16,7 @@ y un **motor de reglas Steel/Scheme** que se auto-extiende via LLM cuando encuen
 - [Configuración (.env)](#configuración-env)
 - [Esquema canónico](#esquema-canónico)
 - [Motor de reglas](#motor-de-reglas)
+- [Body mapping configurable](#body-mapping-configurable)
 - [BrowserPool](#browserpool)
 - [Pipeline de normalización](#pipeline-de-normalización)
 - [Cliente LLM](#cliente-llm)
@@ -87,6 +88,7 @@ y un **motor de reglas Steel/Scheme** que se auto-extiende via LLM cuando encuen
 scraper/
 ├── Cargo.toml              # Dependencias Rust
 ├── pyproject.toml           # Dependencias Python + build maturin
+├── body_mapping.toml        # Mapping configurable Propiedad → body del monolito
 ├── .env.example             # Template de variables de entorno
 ├── .env                     # ⛔ (no se commitea) Variables reales
 ├── uv.lock                  # (generado) Lockfile determinista
@@ -168,7 +170,7 @@ cp .env.example .env
 # Editar .env con tus valores (ver sección siguiente)
 
 # 6. Verificar que todo funciona
-uv run pytest tests/ -v
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 uv run pytest tests/ -v
 ```
 
 > **Nota sobre `PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1`:**
@@ -204,6 +206,7 @@ Luego editá `.env` con tus valores reales.
 | `PARALELO` | `bool` | `true` | No | `true` = asyncio.gather / `false` = secuencial |
 | `LOG_LEVEL` | `str` | `INFO` | No | Nivel de logging (DEBUG, INFO, WARNING, ERROR) |
 | `REGLAS_PATH` | `str` | `reglas/reglas.toml` | No | Ruta al índice de reglas |
+| `BODY_MAPPING_PATH` | `str` | `body_mapping.toml` | No | Ruta al archivo de mapping Propiedad → body POST |
 
 > ¹ `GROQ_API_KEY` solo es obligatoria si querés que el scraper auto-genere reglas
 > para campos desconocidos. Sin ella, el scraper funciona con las reglas base
@@ -225,6 +228,7 @@ MAX_WORKERS=8
 PARALELO=true
 LOG_LEVEL=DEBUG
 REGLAS_PATH=reglas/reglas.toml
+BODY_MAPPING_PATH=body_mapping.toml
 ```
 
 > **⚠️ Seguridad:** El archivo `.env` está en `.gitignore` y **nunca debe commitearse**.
@@ -317,6 +321,66 @@ expuesto a Python via PyO3.
    - Coinciden con la **fuente** del sitio
 4. Las reglas pueden ser **generadas por el LLM** en runtime y se persisten automáticamente
 
+### Evaluación granular (sandbox aislado)
+
+Cada regla se evalúa en un **Engine Steel aislado** (un VM fresco por regla):
+
+```
+┌────────────────────────────────────────────┐
+│        evaluar_regla(codigo, campos)       │
+│                                            │
+│  1. Engine::new()           ← VM fresco    │
+│  2. vm.register_fn(...)     ← 6 helpers    │
+│  3. vm.run(codigo)          ← carga .scm   │
+│  4. json_to_steel(campos)   ← JSON→Steel   │
+│  5. vm.call("aplicar", ...) ← ejecuta      │
+│  6. steel_to_json(result)   ← Steel→JSON   │
+└────────────────────────────────────────────┘
+```
+
+- **Sin estado compartido** entre reglas — cada una es un sandbox.
+- Si una regla falla, se loggea y se **continúa con la siguiente** (degradación controlada).
+- La conversión `JSON ↔ SteelVal` soporta strings, números, booleanos, arrays, hashes y null.
+
+### Helpers Rust registrados en Scheme
+
+Los archivos `.scm` **no implementan regex ni parsing** directamente.
+En su lugar, delegan a funciones Rust registradas con `vm.register_fn()`:
+
+| Función Scheme | Firma Rust | Qué hace |
+|---|---|---|
+| `(parse-leaflet-center str)` | `String → Option<Vec<f64>>` | Parsea `"lat,lng"` → `(lat lng)` o `#f` |
+| `(parse-gmaps-coords str)` | `String → Option<Vec<f64>>` | Parsea iframe GMaps (`!2d!3d` o `?q=`) → `(lat lng)` o `#f` |
+| `(es-consultable? str)` | `String → bool` | Detecta "consultar"/"consulte" en precio_raw |
+| `(extraer-monto-usd str)` | `String → Option<f64>` | Extrae monto de `"USD 150.000"` / `"U$S 150,000"` |
+| `(extraer-monto-local str)` | `String → Option<f64>` | Extrae monto de `"$ 50.000.000"` |
+| `(parse-numero-ar str)` | `String → Option<f64>` | Parsea formato argentino/boliviano (`1.500,50` → `1500.5`) |
+
+Esto mantiene los `.scm` **cortos y declarativos** (5-15 líneas), delegando la complejidad a Rust compilado.
+
+### Ejemplo de regla base (precio.scm)
+
+```scheme
+(define (aplicar campos)
+  (let ((raw (hash-try-get campos "precio_raw")))
+    (if (not raw)
+        campos
+        (let ((result campos))
+          ;; Consultable?
+          (let ((result (if (es-consultable? raw)
+                            (hash-insert result "precio_consultable" #t)
+                            result)))
+            ;; Monto USD
+            (let ((usd (extraer-monto-usd raw)))
+              (let ((result (if usd (hash-insert result "precio_usd" usd) result)))
+                ;; Monto local
+                (let ((loc (extraer-monto-local raw)))
+                  (if loc
+                      (hash-insert (hash-insert result "precio_local" loc)
+                                   "moneda_local" "ARS")
+                      result)))))))))
+```
+
 ### Índice de reglas (reglas.toml)
 
 ```toml
@@ -356,6 +420,77 @@ motor.agregar_regla(
     "argenprop",                             # fuente (None = global)
     0.5,                                     # confianza
 )
+```
+
+---
+
+## Body mapping configurable
+
+El scraper transforma la `Propiedad` normalizada antes de enviarla al monolito.
+El mapping se define en `body_mapping.toml` y permite adaptar el body del POST
+**sin tocar código Python ni recompilar**.
+
+### ¿Por qué?
+
+El esquema interno (`Propiedad`) no necesariamente coincide con el que espera la API destino.
+Por ejemplo, la API puede esperar `id_propiedad` en vez de `id`, o `construccion_m2` en vez de `m2_cubierto`.
+
+### Formato del archivo
+
+```toml
+# body_mapping.toml — Mapping Propiedad → body POST monolito
+
+[campos]
+# destino = "origen"    (campo directo)
+# destino = "template"  (interpolación con {campo})
+id_propiedad     = "id"
+nombre_propiedad = "{operacion}-{tipo}-{ciudad}-{id}"
+precio_bob       = "precio_local"
+precio_usd       = "precio_usd"
+direccion        = "direccion_raw"
+zona             = "ciudad"
+latitud          = "lat"
+longitud         = "lng"
+construccion_m2  = "m2_cubierto"
+terreno_m2       = "m2_terreno"
+habitaciones     = "dormitorios"
+banos            = "banos"
+garaje           = "cocheras"
+tipo_propiedad   = "tipo"
+tipo_operacion   = "operacion"
+fuente           = "fuente"
+url              = "url_origen"
+
+[defaults]
+# Valores por defecto si el campo origen es None o no existe
+estado      = "disponible"
+moneda      = "BOB"
+descripcion = ""
+```
+
+### Interpolación de templates
+
+Si el valor contiene `{campo}`, se interpola con los valores de la Propiedad:
+
+```
+nombre_propiedad = "{operacion}-{tipo}-{ciudad}-{id}"
+```
+
+Con una propiedad `operacion="venta"`, `tipo="casa"`, `ciudad="Cochabamba"`, `id="abc-123"`:
+
+```json
+"nombre_propiedad": "venta-casa-Cochabamba-abc-123"
+```
+
+Si algún campo del template es `None`, se reemplaza por string vacío.
+
+### Configurar la ruta
+
+Por defecto busca `body_mapping.toml` en la raíz del proyecto.
+Se puede cambiar con la variable de entorno `BODY_MAPPING_PATH`:
+
+```env
+BODY_MAPPING_PATH=config/mi_mapping.toml
 ```
 
 ---
@@ -464,12 +599,30 @@ Implementado en `scraper/cliente.py`. Envía propiedades normalizadas al monolit
 |---|---|
 | Método | `POST` |
 | URL | `{MONOLITO_URL}/propiedades` |
-| Formato | JSON (esquema canónico completo) |
+| Formato | JSON transformado según `body_mapping.toml` |
 | Timeout | 30 segundos |
 | Reintentos | 3 con backoff exponencial (1s → 2s → 4s) |
 | Reintentar en | 5xx, timeout |
 | No reintentar en | 4xx, errores de red irrecuperables |
 | Logging | `url_origen` y `fuente` en cada request |
+
+### Body mapping
+
+Antes de enviar, `transformar_body(propiedad)` convierte la `Propiedad` al formato
+que espera la API destino usando `body_mapping.toml`:
+
+```python
+# Propiedad interna                → Body POST al monolito
+{                                    {
+  "id": "abc-123",                     "id_propiedad": "abc-123",
+  "precio_local": 150000,             "precio_bob": 150000,
+  "m2_cubierto": 120.0,               "construccion_m2": 120.0,
+  "operacion": "venta",               "nombre_propiedad": "venta-casa-...",
+  ...                                  ...
+}                                    }
+```
+
+Si no existe `body_mapping.toml`, se envía `propiedad.model_dump()` sin transformar (fallback).
 
 ---
 
@@ -478,17 +631,17 @@ Implementado en `scraper/cliente.py`. Envía propiedades normalizadas al monolit
 ### Correr tests
 
 ```bash
-# Todos los tests
-uv run pytest tests/ -v
+# Todos los tests (requiere el flag para Python 3.13+)
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 uv run pytest tests/ -v
 
 # Solo tests de precio
-uv run pytest tests/test_motor.py::TestPrecio -v
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 uv run pytest tests/test_motor.py::TestPrecio -v
 
 # Solo tests de Google Maps
-uv run pytest tests/test_motor.py::TestGmaps -v
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 uv run pytest tests/test_motor.py::TestGmaps -v
 
 # Solo tests de schema
-uv run pytest tests/test_motor.py::TestSchema -v
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 uv run pytest tests/test_motor.py::TestSchema -v
 ```
 
 ### Tests incluidos (12 total)
@@ -592,6 +745,9 @@ print(p.model_dump_json(indent=2))
 | **asyncio puro** (sin Redis/Celery) | Simplicidad. Un solo proceso, sin broker externo. |
 | **1 browser, N contextos** (sin múltiples browsers) | Más eficiente en memoria. Contextos aislados comparten proceso. |
 | **Reglas en archivos .scm** (sin hardcodear en Python/Rust) | Extensibles sin recompilar. El LLM las genera en runtime. |
+| **Engine aislado por regla** (sin VM compartida) | Sandbox real. Una regla malformada no afecta a las demás. |
+| **Helpers Rust en Scheme** (sin regex en .scm) | Parsing pesado en Rust compilado, reglas declarativas y cortas. |
+| **Body mapping TOML** (sin hardcodear en cliente.py) | Adaptar el body del POST sin tocar código ni recompilar. |
 | **httpx** (sin requests) | Nativo async, no bloquea el event loop. |
 | **Steel/Scheme** (sin Lua/WASM) | Funcional puro, sandboxeable, expresivo para transformaciones. |
 | **pydantic-settings + .env** | Estándar 12-factor. Fácil en local y en deploy. |

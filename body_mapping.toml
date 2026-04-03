@@ -1,0 +1,42 @@
+# ── Mapeo de body configurable para POST al monolito ─────────────────────────
+#
+# Define cómo se transforma el esquema canónico (Propiedad) al formato
+# que espera el endpoint del monolito.
+#
+# Cada campo del body destino se mapea a un campo del esquema canónico:
+#   campo_destino = "campo_origen"         → copia directa
+#   campo_destino = "{campo1}-{campo2}"    → template con interpolación
+#   campo_destino = ""                     → campo vacío / no mapeado
+#
+# Campos disponibles del esquema canónico:
+#   id, fuente, url_origen, tipo, operacion, scraped_at, precio_raw, pais,
+#   precio_usd, precio_local, moneda_local, precio_consultable, expensas,
+#   lat, lng, geo_confianza, direccion_raw, ciudad,
+#   m2_total, m2_cubierto, m2_terreno, ambientes, dormitorios, banos,
+#   cocheras, antiguedad, estado, amenities
+
+[mapping]
+id_propiedad       = "id"
+nombre_propiedad   = "{operacion}-{tipo}-{ciudad}-{id}"
+direccion          = "direccion_raw"
+construccion_m2    = "m2_cubierto"
+terreno_m2         = "m2_terreno"
+precio_original    = "precio_raw"
+tipo_moneda        = "moneda_local"
+precio_bob         = "precio_local"
+precio_usd         = "precio_usd"
+cambio_utilizado   = ""
+precio_m2_bob      = ""
+precio_m2_usd      = ""
+id_zona            = ""
+id_tipo_propiedad  = ""
+created_at         = "scraped_at"
+url_imagen         = ""
+descripcion        = "tipo"
+
+# ── Valores por defecto ──────────────────────────────────────────────────────
+# Se usan cuando el campo origen es null o vacío
+
+[defaults]
+tipo_moneda        = "BOB"
+cambio_utilizado   = "6.8600"
