@@ -222,9 +222,27 @@ fn evaluar_regla(codigo: &str, campos: &serde_json::Value) -> Result<serde_json:
     vm.register_fn("parse-numero-ar", helper_parse_numero_ar);
 
     // Cargar la regla (define la función `aplicar`)
-    // Steel's run() requires 'static lifetime, so we leak an owned copy.
-    let codigo_owned: &'static str = Box::leak(codigo.to_string().into_boxed_str());
-    vm.run(codigo_owned).map_err(|e| format!("Steel load: {e}"))?;
+    // Steel's run() requires 'static lifetime.  We cache leaked copies
+    // in a static HashMap keyed by content hash so each unique rule
+    // string is leaked exactly once across the entire process lifetime.
+    use std::collections::hash_map::DefaultHasher;
+    use std::hash::{Hash, Hasher};
+    use std::sync::Mutex;
+
+    static RULE_CACHE: std::sync::LazyLock<Mutex<HashMap<u64, &'static str>>> =
+        std::sync::LazyLock::new(|| Mutex::new(HashMap::new()));
+
+    let codigo_static: &'static str = {
+        let mut hasher = DefaultHasher::new();
+        codigo.hash(&mut hasher);
+        let key = hasher.finish();
+
+        let mut cache = RULE_CACHE.lock().unwrap();
+        *cache.entry(key).or_insert_with(|| {
+            Box::leak(codigo.to_string().into_boxed_str())
+        })
+    };
+    vm.run(codigo_static).map_err(|e| format!("Steel load: {e}"))?;
 
     // Convertir campos JSON → hash Scheme
     let steel_campos: steel::SteelVal = json_to_steel(campos)?;

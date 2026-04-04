@@ -39,14 +39,24 @@ El esquema canónico de destino tiene estos campos:
 Cada regla Steel define una función `aplicar` que recibe un hash con campos
 y devuelve un hash actualizado.
 
-Sintaxis Steel/Scheme:
+Sintaxis Steel/Scheme (ESTRICTA — NO usar funciones de Racket):
 ```scheme
 (define (aplicar campos)
-  (let ((valor (hash-ref campos "campo_entrada")))
+  (let ((valor (hash-try-get campos "campo_entrada")))
     (if valor
-      (hash-set campos "campo_destino" (transformar valor))
+      (hash-insert campos "campo_destino" (transformar valor))
       campos)))
 ```
+
+Funciones de hash permitidas (Steel):
+- (hash-try-get h key)    → obtener valor o #f
+- (hash-insert h key val) → devolver hash con par nuevo
+- (hash-contains? h key)  → verificar existencia
+
+Funciones PROHIBIDAS (Racket — NO existen en Steel):
+- hash-ref   → USAR hash-try-get
+- hash-set   → USAR hash-insert
+- hash-set!  → NO EXISTE
 
 IMPORTANTE:
 - Responde SOLO con código Scheme válido, sin explicaciones ni markdown.
@@ -142,7 +152,7 @@ def inferir_reglas(
         Lista de strings, cada uno es código Scheme válido para una regla.
     """
     if not settings.groq_api_key:
-        logger.warning("GROQ_API_KEY no configurada, saltando inferencia LLM")
+        logger.warning("GROQ_API_KEY no configurada — inferencia LLM desactivada")
         return []
 
     client = Groq(api_key=settings.groq_api_key)
@@ -182,7 +192,7 @@ def inferir_reglas(
 
             if valid_blocks:
                 logger.info(
-                    "LLM generó %d reglas válidas para %s (intento %d)",
+                    "%d reglas inferidas por LLM para '%s' (intento %d)",
                     len(valid_blocks),
                     fuente,
                     intento + 1,
@@ -190,12 +200,12 @@ def inferir_reglas(
                 return valid_blocks
 
             logger.warning(
-                "LLM no generó reglas válidas (intento %d), blocks=%d",
+                "LLM no produjo reglas válidas en intento %d (%d bloques descartados)",
                 intento + 1,
                 len(blocks),
             )
 
         except Exception as e:
-            logger.error("Error llamando a Groq (intento %d): %s", intento + 1, e)
+            logger.error("Groq API falló en intento %d: %s", intento + 1, e)
 
     return []

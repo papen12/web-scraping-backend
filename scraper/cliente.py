@@ -45,7 +45,7 @@ def _cargar_body_mapping() -> tuple[dict[str, str], dict[str, str]]:
         data = toml_lib.load(str(mapping_path))
         return data.get("mapping", {}), data.get("defaults", {})
     except Exception as e:
-        logger.warning("Error cargando body_mapping.toml: %s", e)
+        logger.warning("No se pudo leer body_mapping.toml — se usará esquema por defecto: %s", e)
         return {}, {}
 
 
@@ -211,9 +211,8 @@ class ClienteMonolito:
         async with httpx.AsyncClient(timeout=30.0) as client:
             for intento in range(MAX_RETRIES):
                 try:
-                    logger.info(
-                        "POST %s — fuente=%s url=%s (intento %d/%d)",
-                        url,
+                    logger.debug(
+                        "Enviando propiedad al monolito — %s [%s] (intento %d/%d)",
                         propiedad.fuente,
                         propiedad.url_origen,
                         intento + 1,
@@ -224,13 +223,13 @@ class ClienteMonolito:
                     if response.status_code < 500:
                         if response.is_success:
                             logger.info(
-                                "✓ Enviada — fuente=%s url=%s",
+                                "Propiedad enviada al monolito — %s [%s]",
                                 propiedad.fuente,
                                 propiedad.url_origen,
                             )
                         else:
                             logger.warning(
-                                "HTTP %d — fuente=%s url=%s",
+                                "Monolito rechazó propiedad (HTTP %d) — %s [%s]",
                                 response.status_code,
                                 propiedad.fuente,
                                 propiedad.url_origen,
@@ -239,23 +238,23 @@ class ClienteMonolito:
 
                     backoff = BASE_BACKOFF * (2**intento)
                     logger.warning(
-                        "Server %d, retry en %.1fs...", response.status_code, backoff
+                        "Monolito respondió %d — reintentando en %.1fs", response.status_code, backoff
                     )
                     await asyncio.sleep(backoff)
 
                 except (httpx.ConnectError, httpx.TimeoutException):
                     backoff = BASE_BACKOFF * (2**intento)
                     logger.warning(
-                        "Conexión fallida a %s, retry en %.1fs...", url, backoff
+                        "Sin conexión al monolito — reintentando en %.1fs", backoff
                     )
                     await asyncio.sleep(backoff)
 
                 except httpx.HTTPError as e:
-                    logger.error("Error HTTP irrecuperable: %s", e)
+                    logger.error("Error irrecuperable en envío HTTP: %s", e)
                     return False
 
         logger.error(
-            "Falló envío tras %d intentos: %s", MAX_RETRIES, propiedad.url_origen
+            "Propiedad no enviada tras %d intentos — %s", MAX_RETRIES, propiedad.url_origen
         )
         return False
 
@@ -271,7 +270,7 @@ class ClienteMonolito:
         filepath.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
         self._fallback += 1
         logger.info(
-            "💾 Guardada en disco: %s (%s)", filename, propiedad.url_origen
+            "Propiedad guardada localmente — %s  [%s]", filename, propiedad.url_origen
         )
 
     async def reintentar_pendientes(self) -> dict[str, int]:
@@ -287,7 +286,7 @@ class ClienteMonolito:
         if not archivos:
             return {"encontradas": 0, "enviadas": 0, "fallidas": 0}
 
-        logger.info("📤 Reintentando %d propiedades pendientes...", len(archivos))
+        logger.info("Reintentando envío de %d propiedades pendientes", len(archivos))
         enviadas = 0
         fallidas = 0
 
@@ -302,11 +301,11 @@ class ClienteMonolito:
                 else:
                     fallidas += 1
             except Exception as e:
-                logger.error("Error reintentando %s: %s", archivo.name, e)
+                logger.error("Fallo al reintentar %s: %s", archivo.name, e)
                 fallidas += 1
 
         logger.info(
-            "📤 Reintento completado: %d enviadas, %d fallidas", enviadas, fallidas
+            "Reintento completado — %d enviadas, %d pendientes", enviadas, fallidas
         )
         return {"encontradas": len(archivos), "enviadas": enviadas, "fallidas": fallidas}
 

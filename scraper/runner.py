@@ -3,13 +3,21 @@ runner.py — Entry point único del scraper.
 
 run(sitios, paralelo, workers) orquesta la captura, normalización,
 resolución LLM y envío al monolito.
+
+Modo continuo: main() carga sitios.toml y los scrapea en loop infinito,
+esperando un intervalo configurable entre ciclos.
 """
 
 from __future__ import annotations
 
 import asyncio
 import logging
+import logging.handlers
+import signal
+import tomllib
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 from scraper.config import settings
@@ -20,6 +28,9 @@ from scraper.schema import Propiedad
 
 logger = logging.getLogger(__name__)
 
+# Intervalo entre ciclos de scraping (segundos). Default 30 min.
+INTERVALO_SCRAPING = int(__import__("os").environ.get("SCRAPING_INTERVALO", 1800))
+
 
 @dataclass
 class SitioConfig:
@@ -27,7 +38,7 @@ class SitioConfig:
 
     nombre: str
     url: str
-    pais: str = "AR"
+    pais: str = "BO"
 
 
 async def _scrape_sitio(pool: BrowserPool, sitio: SitioConfig) -> list[Propiedad]:
@@ -37,8 +48,10 @@ async def _scrape_sitio(pool: BrowserPool, sitio: SitioConfig) -> list[Propiedad
     async with pool.context() as ctx:
         page = await ctx.new_page()
         try:
-            logger.info("Navegando a %s (%s)", sitio.url, sitio.nombre)
-            await page.goto(sitio.url, wait_until="networkidle", timeout=30_000)
+            logger.info("Accediendo a %s  [%s]", sitio.nombre, sitio.url)
+            await page.goto(sitio.url, wait_until="domcontentloaded", timeout=30_000)
+            # Esperar un poco para que JS dinámico cargue
+            await page.wait_for_timeout(3_000)
             html = await page.content()
 
             # Extraer datos crudos de la página
@@ -54,7 +67,7 @@ async def _scrape_sitio(pool: BrowserPool, sitio: SitioConfig) -> list[Propiedad
             propiedades.append(propiedad)
 
         except Exception:
-            logger.exception("Error scrapeando %s", sitio.url)
+            logger.exception("Fallo al procesar %s (%s)", sitio.nombre, sitio.url)
         finally:
             await page.close()
 
@@ -135,7 +148,7 @@ async def run(
                 if isinstance(resultado, list):
                     todas.extend(resultado)
                 elif isinstance(resultado, Exception):
-                    logger.error("Tarea fallida: %s", resultado)
+                    logger.error("Sitio no procesado: %s", resultado)
         else:
             # Ejecución secuencial
             for sitio in sitios:
@@ -147,17 +160,130 @@ async def run(
         try:
             await enviar_propiedad(prop)
         except Exception:
-            logger.exception("Error enviando propiedad %s", prop.url_origen)
+            logger.exception("No se pudo enviar propiedad de %s", prop.url_origen)
 
-    logger.info("Scraping completado: %d propiedades", len(todas))
+    logger.info("Ronda completada — %d propiedades procesadas", len(todas))
     return todas
 
 
-def main() -> None:
-    """CLI entry point."""
-    logging.basicConfig(
-        level=getattr(logging, settings.log_level.upper(), logging.INFO),
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+def _configurar_logging() -> Path:
+    """Configura logging dual: consola (conciso) + archivo .txt (detallado).
+
+    Returns:
+        Path al archivo de log actual.
+    """
+    log_dir = settings.log_abs_path
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / f"scraper_{datetime.now():%Y-%m-%d}.txt"
+
+    nivel = getattr(logging, settings.log_level.upper(), logging.INFO)
+    root = logging.getLogger()
+    root.setLevel(nivel)
+
+    # ── Consola: conciso ──────────────────────────────────────────────────
+    consola = logging.StreamHandler()
+    consola.setLevel(nivel)
+    consola.setFormatter(logging.Formatter(
+        "%(asctime)s │ %(levelname)-7s │ %(message)s",
+        datefmt="%H:%M:%S",
+    ))
+
+    # ── Archivo: detallado con rotación ───────────────────────────────────
+    archivo = logging.handlers.RotatingFileHandler(
+        log_file,
+        maxBytes=settings.log_max_bytes,
+        backupCount=settings.log_backup_count,
+        encoding="utf-8",
     )
-    # Ejemplo: se configura con sitios desde un archivo o argumentos
-    logger.info("Scraper iniciado. Configurar sitios para comenzar.")
+    archivo.setLevel(logging.DEBUG)
+    archivo.setFormatter(logging.Formatter(
+        "%(asctime)s  [%(levelname)-7s]  %(name)s  —  %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    ))
+
+    root.addHandler(consola)
+    root.addHandler(archivo)
+    return log_file
+
+
+def main() -> None:
+    """CLI entry point — scraping continuo desde sitios.toml."""
+    log_file = _configurar_logging()
+
+    sitios = _cargar_sitios()
+    if not sitios:
+        logger.error("No hay sitios activos en %s", settings.sitios_abs_path)
+        return
+
+    logger.info(
+        "Scraper iniciado — %d sitios, ciclo cada %ds, %d workers  |  logs → %s",
+        len(sitios),
+        INTERVALO_SCRAPING,
+        settings.max_workers,
+        log_file,
+    )
+
+    asyncio.run(_loop_continuo(sitios))
+
+
+def _cargar_sitios() -> list[SitioConfig]:
+    """Carga sitios activos desde sitios.toml."""
+    path = settings.sitios_abs_path
+    if not path.exists():
+        logger.error("No se encontró %s", path)
+        return []
+
+    with open(path, "rb") as f:
+        data = tomllib.load(f)
+
+    sitios: list[SitioConfig] = []
+    for entry in data.get("sitio", []):
+        if not entry.get("activo", True):
+            continue
+        sitios.append(
+            SitioConfig(
+                nombre=entry["nombre"],
+                url=entry["url"],
+                pais=entry.get("pais", "BO"),
+            )
+        )
+    return sitios
+
+
+async def _loop_continuo(sitios: list[SitioConfig]) -> None:
+    """Loop infinito de scraping con graceful shutdown via SIGINT/SIGTERM."""
+    detener = asyncio.Event()
+
+    loop = asyncio.get_running_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, detener.set)
+
+    ciclo = 0
+    while not detener.is_set():
+        ciclo += 1
+        logger.info("── Ciclo %d: procesando %d sitios ──", ciclo, len(sitios))
+
+        try:
+            resultado = await run(sitios)
+            logger.info(
+                "Ciclo %d finalizado — %d propiedades obtenidas",
+                ciclo,
+                len(resultado),
+            )
+        except Exception:
+            logger.exception("Ciclo %d interrumpido por error", ciclo)
+
+        if detener.is_set():
+            break
+
+        logger.info("Próximo ciclo en %d segundos", INTERVALO_SCRAPING)
+        try:
+            await asyncio.wait_for(detener.wait(), timeout=INTERVALO_SCRAPING)
+        except asyncio.TimeoutError:
+            pass  # Timeout normal → siguiente ciclo
+
+    logger.info("Scraper detenido — cierre limpio")
+
+
+if __name__ == "__main__":
+    main()

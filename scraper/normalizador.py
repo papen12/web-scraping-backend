@@ -40,7 +40,7 @@ def _cargar_motor():
         return scraper_core.MotorReglas(settings.reglas_path)
     except ImportError:
         logger.warning(
-            "scraper_core no disponible. Ejecutar: maturin develop --release"
+            "Motor Rust no disponible — ejecutar: maturin develop --release"
         )
         return None
 
@@ -98,7 +98,7 @@ def normalizar(
                 )
                 reglas_aplicadas.append("extractor:precio")
             except Exception as e:
-                logger.warning("Error normalizando precio: %s", e)
+                logger.warning("No se pudo interpretar el precio '%s': %s", precio_raw, e)
                 campos_sin_resolver.append("precio")
 
         # Extraer coords de Google Maps
@@ -111,7 +111,7 @@ def normalizar(
                 campos["geo_confianza"] = GeoConfianza.iframe.value
                 reglas_aplicadas.append("extractor:gmaps")
             except Exception as e:
-                logger.debug("No se extrajeron coords de gmaps: %s", e)
+                logger.debug("Sin coordenadas Google Maps: %s", e)
 
         # Extraer coords de Leaflet
         js_center = raw_payload.get("js_leaflet_center")
@@ -123,7 +123,7 @@ def normalizar(
                 campos["geo_confianza"] = GeoConfianza.leaflet.value
                 reglas_aplicadas.append("extractor:leaflet")
             except Exception as e:
-                logger.debug("No se extrajeron coords de leaflet: %s", e)
+                logger.debug("Sin coordenadas Leaflet: %s", e)
 
     # ── Aplicar reglas Scheme via MotorReglas ─────────────────────────────
     motor = _cargar_motor()
@@ -138,7 +138,7 @@ def normalizar(
             if "reglas_aplicadas" in resultado:
                 reglas_aplicadas.extend(resultado["reglas_aplicadas"])
         except Exception as e:
-            logger.warning("Error aplicando reglas Scheme: %s", e)
+            logger.warning("Reglas Scheme no se pudieron aplicar: %s", e)
 
     # ── Detectar campos sin resolver ──────────────────────────────────────
     for campo in CAMPOS_RESOLVIBLES:
@@ -165,10 +165,10 @@ def normalizar(
                         motor.agregar_regla(nombre, regla_code, fuente, 0.3)
                         reglas_aplicadas.append(nombre)
                     except Exception as e:
-                        logger.warning("Error agregando regla LLM: %s", e)
+                        logger.warning("Regla LLM descartada (sintaxis inválida): %s", e)
                 llm_usado = True
         except Exception as e:
-            logger.warning("Error con LLM: %s", e)
+            logger.warning("Inferencia LLM falló para %s: %s", fuente, e)
 
     # ── Construir Propiedad ───────────────────────────────────────────────
     geo_conf_str = campos.get("geo_confianza", "ausente")

@@ -27,7 +27,6 @@ CHROMIUM_ARGS = [
     "--no-sandbox",
     "--disable-dev-shm-usage",
     "--disable-gpu",
-    "--single-process",
 ]
 
 
@@ -54,9 +53,11 @@ class BrowserPool:
         self._browser = await self._playwright.chromium.launch(
             headless=True,
             args=CHROMIUM_ARGS,
+            handle_sigint=False,
+            handle_sigterm=False,
         )
         logger.info(
-            "BrowserPool iniciado: 1 browser, max %d contextos concurrentes",
+            "Navegador listo — capacidad máxima: %d páginas simultáneas",
             self._workers,
         )
         return self
@@ -71,7 +72,7 @@ class BrowserPool:
             await self._browser.close()
         if self._playwright:
             await self._playwright.stop()
-        logger.info("BrowserPool cerrado")
+        logger.info("Navegador cerrado correctamente")
 
     @asynccontextmanager
     async def context(self) -> AsyncIterator[BrowserContext]:

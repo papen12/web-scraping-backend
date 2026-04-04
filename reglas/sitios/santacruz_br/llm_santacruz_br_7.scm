@@ -1,0 +1,5 @@
+(define (aplicar campos)
+  (let ((valor (hash-try-get campos "geo_confianza")))
+    (if (not valor)
+      (hash-insert campos "geo_confianza" "ausente")
+      campos)))

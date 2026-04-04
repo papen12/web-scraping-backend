@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     reglas_path: str = "reglas/reglas.toml"
     sitios_path: str = "sitios.toml"
     fallback_dir: str = "output/pendientes"
+    log_dir: str = "output/logs"
+    log_max_bytes: int = 5_242_880  # 5 MB
+    log_backup_count: int = 5
     navegacion_timeout: int = 45_000  # ms
     body_mapping_path: str = "body_mapping.toml"
 
@@ -40,6 +43,10 @@ class Settings(BaseSettings):
     @property
     def fallback_path(self) -> Path:
         return PROJECT_ROOT / self.fallback_dir
+
+    @property
+    def log_abs_path(self) -> Path:
+        return PROJECT_ROOT / self.log_dir
 
     @property
     def sitios_abs_path(self) -> Path:

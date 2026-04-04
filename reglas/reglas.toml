@@ -1,26 +1,1389 @@
-# ── Índice de reglas del scraper inmobiliario ─────────────────────────────────
-#
-# Cada [[regla]] define:
-#   nombre   = identificador único
-#   archivo  = ruta relativa al .scm (desde este directorio)
-#   fuente   = nombre del sitio (omitir para regla global)
-#   activa   = true/false
-#   confianza = 0.0–1.0
-
 [[regla]]
-nombre    = "leaflet"
-archivo   = "base/leaflet.scm"
-activa    = true
+nombre = "leaflet"
+archivo = "base/leaflet.scm"
+activa = true
 confianza = 0.8
 
 [[regla]]
-nombre    = "gmaps"
-archivo   = "base/gmaps.scm"
-activa    = true
+nombre = "gmaps"
+archivo = "base/gmaps.scm"
+activa = true
 confianza = 0.8
 
 [[regla]]
-nombre    = "precio"
-archivo   = "base/precio.scm"
-activa    = true
+nombre = "precio"
+archivo = "base/precio.scm"
+activa = true
 confianza = 0.7
+
+[[regla]]
+nombre = "llm_slideprop_3"
+archivo = "sitios/slideprop/llm_slideprop_3.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_4"
+archivo = "sitios/slideprop/llm_slideprop_4.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_5"
+archivo = "sitios/slideprop/llm_slideprop_5.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_6"
+archivo = "sitios/slideprop/llm_slideprop_6.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_7"
+archivo = "sitios/slideprop/llm_slideprop_7.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_8"
+archivo = "sitios/slideprop/llm_slideprop_8.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_9"
+archivo = "sitios/slideprop/llm_slideprop_9.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_3"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_3.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_4"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_4.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_5"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_5.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_6"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_6.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_7"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_7.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_8"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_8.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_9"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_9.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_10"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_10.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_3"
+archivo = "sitios/slideprop/llm_slideprop_3.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_4"
+archivo = "sitios/slideprop/llm_slideprop_4.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_5"
+archivo = "sitios/slideprop/llm_slideprop_5.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_6"
+archivo = "sitios/slideprop/llm_slideprop_6.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_7"
+archivo = "sitios/slideprop/llm_slideprop_7.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_8"
+archivo = "sitios/slideprop/llm_slideprop_8.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_9"
+archivo = "sitios/slideprop/llm_slideprop_9.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_3"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_3.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_4"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_4.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_5"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_5.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_6"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_6.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_7"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_7.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_8"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_8.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_9"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_9.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_3"
+archivo = "sitios/infocasas/llm_infocasas_3.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_4"
+archivo = "sitios/infocasas/llm_infocasas_4.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_5"
+archivo = "sitios/infocasas/llm_infocasas_5.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_6"
+archivo = "sitios/infocasas/llm_infocasas_6.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_7"
+archivo = "sitios/infocasas/llm_infocasas_7.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_8"
+archivo = "sitios/infocasas/llm_infocasas_8.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_9"
+archivo = "sitios/infocasas/llm_infocasas_9.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_3"
+archivo = "sitios/buscocasita/llm_buscocasita_3.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_4"
+archivo = "sitios/buscocasita/llm_buscocasita_4.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_5"
+archivo = "sitios/buscocasita/llm_buscocasita_5.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_6"
+archivo = "sitios/buscocasita/llm_buscocasita_6.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_7"
+archivo = "sitios/buscocasita/llm_buscocasita_7.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_8"
+archivo = "sitios/buscocasita/llm_buscocasita_8.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_9"
+archivo = "sitios/buscocasita/llm_buscocasita_9.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_3"
+archivo = "sitios/century21/llm_century21_3.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_4"
+archivo = "sitios/century21/llm_century21_4.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_5"
+archivo = "sitios/century21/llm_century21_5.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_6"
+archivo = "sitios/century21/llm_century21_6.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_7"
+archivo = "sitios/century21/llm_century21_7.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_8"
+archivo = "sitios/century21/llm_century21_8.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_9"
+archivo = "sitios/century21/llm_century21_9.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_3"
+archivo = "sitios/jhely/llm_jhely_3.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_4"
+archivo = "sitios/jhely/llm_jhely_4.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_5"
+archivo = "sitios/jhely/llm_jhely_5.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_6"
+archivo = "sitios/jhely/llm_jhely_6.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_7"
+archivo = "sitios/jhely/llm_jhely_7.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_8"
+archivo = "sitios/jhely/llm_jhely_8.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_9"
+archivo = "sitios/jhely/llm_jhely_9.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_3"
+archivo = "sitios/alfa/llm_alfa_3.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_4"
+archivo = "sitios/alfa/llm_alfa_4.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_5"
+archivo = "sitios/alfa/llm_alfa_5.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_6"
+archivo = "sitios/alfa/llm_alfa_6.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_7"
+archivo = "sitios/alfa/llm_alfa_7.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_8"
+archivo = "sitios/alfa/llm_alfa_8.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_9"
+archivo = "sitios/alfa/llm_alfa_9.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_3"
+archivo = "sitios/santacruz_br/llm_santacruz_br_3.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_4"
+archivo = "sitios/santacruz_br/llm_santacruz_br_4.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_5"
+archivo = "sitios/santacruz_br/llm_santacruz_br_5.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_6"
+archivo = "sitios/santacruz_br/llm_santacruz_br_6.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_7"
+archivo = "sitios/santacruz_br/llm_santacruz_br_7.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_8"
+archivo = "sitios/santacruz_br/llm_santacruz_br_8.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_3"
+archivo = "sitios/vision/llm_vision_3.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_4"
+archivo = "sitios/vision/llm_vision_4.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_5"
+archivo = "sitios/vision/llm_vision_5.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_6"
+archivo = "sitios/vision/llm_vision_6.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_7"
+archivo = "sitios/vision/llm_vision_7.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_8"
+archivo = "sitios/vision/llm_vision_8.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_9"
+archivo = "sitios/vision/llm_vision_9.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_3"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_3.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_4"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_4.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_5"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_5.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_6"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_6.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_7"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_7.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_8"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_8.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_9"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_9.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_3"
+archivo = "sitios/bolivian_re/llm_bolivian_re_3.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_4"
+archivo = "sitios/bolivian_re/llm_bolivian_re_4.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_5"
+archivo = "sitios/bolivian_re/llm_bolivian_re_5.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_6"
+archivo = "sitios/bolivian_re/llm_bolivian_re_6.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_7"
+archivo = "sitios/bolivian_re/llm_bolivian_re_7.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_8"
+archivo = "sitios/bolivian_re/llm_bolivian_re_8.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_9"
+archivo = "sitios/bolivian_re/llm_bolivian_re_9.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_3"
+archivo = "sitios/procasa/llm_procasa_3.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_4"
+archivo = "sitios/procasa/llm_procasa_4.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_5"
+archivo = "sitios/procasa/llm_procasa_5.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_6"
+archivo = "sitios/procasa/llm_procasa_6.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_7"
+archivo = "sitios/procasa/llm_procasa_7.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_8"
+archivo = "sitios/procasa/llm_procasa_8.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_9"
+archivo = "sitios/procasa/llm_procasa_9.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_3"
+archivo = "sitios/ultracasas/llm_ultracasas_3.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_4"
+archivo = "sitios/ultracasas/llm_ultracasas_4.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_5"
+archivo = "sitios/ultracasas/llm_ultracasas_5.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_6"
+archivo = "sitios/ultracasas/llm_ultracasas_6.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_7"
+archivo = "sitios/ultracasas/llm_ultracasas_7.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_8"
+archivo = "sitios/ultracasas/llm_ultracasas_8.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_9"
+archivo = "sitios/ultracasas/llm_ultracasas_9.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_3"
+archivo = "sitios/slideprop/llm_slideprop_3.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_4"
+archivo = "sitios/slideprop/llm_slideprop_4.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_5"
+archivo = "sitios/slideprop/llm_slideprop_5.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_6"
+archivo = "sitios/slideprop/llm_slideprop_6.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_7"
+archivo = "sitios/slideprop/llm_slideprop_7.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_8"
+archivo = "sitios/slideprop/llm_slideprop_8.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_slideprop_9"
+archivo = "sitios/slideprop/llm_slideprop_9.scm"
+fuente = "slideprop"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_3"
+archivo = "sitios/buscocasita/llm_buscocasita_3.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_4"
+archivo = "sitios/buscocasita/llm_buscocasita_4.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_5"
+archivo = "sitios/buscocasita/llm_buscocasita_5.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_6"
+archivo = "sitios/buscocasita/llm_buscocasita_6.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_7"
+archivo = "sitios/buscocasita/llm_buscocasita_7.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_8"
+archivo = "sitios/buscocasita/llm_buscocasita_8.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_buscocasita_9"
+archivo = "sitios/buscocasita/llm_buscocasita_9.scm"
+fuente = "buscocasita"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_3"
+archivo = "sitios/infocasas/llm_infocasas_3.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_4"
+archivo = "sitios/infocasas/llm_infocasas_4.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_5"
+archivo = "sitios/infocasas/llm_infocasas_5.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_6"
+archivo = "sitios/infocasas/llm_infocasas_6.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_7"
+archivo = "sitios/infocasas/llm_infocasas_7.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_8"
+archivo = "sitios/infocasas/llm_infocasas_8.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_infocasas_9"
+archivo = "sitios/infocasas/llm_infocasas_9.scm"
+fuente = "infocasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_3"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_3.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_4"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_4.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_5"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_5.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_6"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_6.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_7"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_7.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_8"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_8.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_toqueeltimbre_9"
+archivo = "sitios/toqueeltimbre/llm_toqueeltimbre_9.scm"
+fuente = "toqueeltimbre"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_3"
+archivo = "sitios/century21/llm_century21_3.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_4"
+archivo = "sitios/century21/llm_century21_4.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_5"
+archivo = "sitios/century21/llm_century21_5.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_6"
+archivo = "sitios/century21/llm_century21_6.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_7"
+archivo = "sitios/century21/llm_century21_7.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_8"
+archivo = "sitios/century21/llm_century21_8.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_century21_9"
+archivo = "sitios/century21/llm_century21_9.scm"
+fuente = "century21"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_3"
+archivo = "sitios/alfa/llm_alfa_3.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_4"
+archivo = "sitios/alfa/llm_alfa_4.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_5"
+archivo = "sitios/alfa/llm_alfa_5.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_6"
+archivo = "sitios/alfa/llm_alfa_6.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_7"
+archivo = "sitios/alfa/llm_alfa_7.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_8"
+archivo = "sitios/alfa/llm_alfa_8.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_alfa_9"
+archivo = "sitios/alfa/llm_alfa_9.scm"
+fuente = "alfa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_3"
+archivo = "sitios/jhely/llm_jhely_3.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_4"
+archivo = "sitios/jhely/llm_jhely_4.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_5"
+archivo = "sitios/jhely/llm_jhely_5.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_6"
+archivo = "sitios/jhely/llm_jhely_6.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_7"
+archivo = "sitios/jhely/llm_jhely_7.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_8"
+archivo = "sitios/jhely/llm_jhely_8.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_jhely_9"
+archivo = "sitios/jhely/llm_jhely_9.scm"
+fuente = "jhely"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_3"
+archivo = "sitios/bolivian_re/llm_bolivian_re_3.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_4"
+archivo = "sitios/bolivian_re/llm_bolivian_re_4.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_5"
+archivo = "sitios/bolivian_re/llm_bolivian_re_5.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_6"
+archivo = "sitios/bolivian_re/llm_bolivian_re_6.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_7"
+archivo = "sitios/bolivian_re/llm_bolivian_re_7.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_8"
+archivo = "sitios/bolivian_re/llm_bolivian_re_8.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bolivian_re_9"
+archivo = "sitios/bolivian_re/llm_bolivian_re_9.scm"
+fuente = "bolivian_re"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_3"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_3.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_4"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_4.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_5"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_5.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_6"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_6.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_7"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_7.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_8"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_8.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_bienesraicesbo_9"
+archivo = "sitios/bienesraicesbo/llm_bienesraicesbo_9.scm"
+fuente = "bienesraicesbo"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_3"
+archivo = "sitios/vision/llm_vision_3.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_4"
+archivo = "sitios/vision/llm_vision_4.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_5"
+archivo = "sitios/vision/llm_vision_5.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_6"
+archivo = "sitios/vision/llm_vision_6.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_7"
+archivo = "sitios/vision/llm_vision_7.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_8"
+archivo = "sitios/vision/llm_vision_8.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_vision_9"
+archivo = "sitios/vision/llm_vision_9.scm"
+fuente = "vision"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_3"
+archivo = "sitios/santacruz_br/llm_santacruz_br_3.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_4"
+archivo = "sitios/santacruz_br/llm_santacruz_br_4.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_5"
+archivo = "sitios/santacruz_br/llm_santacruz_br_5.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_6"
+archivo = "sitios/santacruz_br/llm_santacruz_br_6.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_7"
+archivo = "sitios/santacruz_br/llm_santacruz_br_7.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_8"
+archivo = "sitios/santacruz_br/llm_santacruz_br_8.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_santacruz_br_9"
+archivo = "sitios/santacruz_br/llm_santacruz_br_9.scm"
+fuente = "santacruz_br"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_3"
+archivo = "sitios/procasa/llm_procasa_3.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_4"
+archivo = "sitios/procasa/llm_procasa_4.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_5"
+archivo = "sitios/procasa/llm_procasa_5.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_6"
+archivo = "sitios/procasa/llm_procasa_6.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_7"
+archivo = "sitios/procasa/llm_procasa_7.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_8"
+archivo = "sitios/procasa/llm_procasa_8.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_procasa_9"
+archivo = "sitios/procasa/llm_procasa_9.scm"
+fuente = "procasa"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_3"
+archivo = "sitios/ultracasas/llm_ultracasas_3.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_4"
+archivo = "sitios/ultracasas/llm_ultracasas_4.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_5"
+archivo = "sitios/ultracasas/llm_ultracasas_5.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_6"
+archivo = "sitios/ultracasas/llm_ultracasas_6.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_7"
+archivo = "sitios/ultracasas/llm_ultracasas_7.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_8"
+archivo = "sitios/ultracasas/llm_ultracasas_8.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3
+
+[[regla]]
+nombre = "llm_ultracasas_9"
+archivo = "sitios/ultracasas/llm_ultracasas_9.scm"
+fuente = "ultracasas"
+activa = true
+confianza = 0.3

@@ -1,0 +1,128 @@
+2026-04-03 21:42:27  [INFO   ]  __main__  —  Scraper iniciado — 15 sitios, ciclo cada 60s, 4 workers  |  logs → /home/alex/scrapper/output/logs/scraper_2026-04-03.txt
+2026-04-03 21:42:27  [INFO   ]  __main__  —  ── Ciclo 1: procesando 15 sitios ──
+2026-04-03 21:42:27  [INFO   ]  scraper.pool  —  Navegador listo — capacidad máxima: 4 páginas simultáneas
+2026-04-03 21:42:27  [INFO   ]  __main__  —  Accediendo a toqueeltimbre  [https://toqueeltimbre.com/]
+2026-04-03 21:42:27  [INFO   ]  __main__  —  Accediendo a buscocasita  [https://bolivia.buscocasita.com/]
+2026-04-03 21:42:27  [INFO   ]  __main__  —  Accediendo a infocasas  [https://www.infocasas.com.bo/]
+2026-04-03 21:42:27  [INFO   ]  __main__  —  Accediendo a slideprop  [https://bolivia.slideprop.com/]
+2026-04-03 21:42:36  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:36  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'slideprop' (intento 1)
+2026-04-03 21:42:38  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:38  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'buscocasita' (intento 1)
+2026-04-03 21:42:38  [INFO   ]  __main__  —  Accediendo a remax  [https://www.remax.com.bo/]
+2026-04-03 21:42:40  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:40  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'infocasas' (intento 1)
+2026-04-03 21:42:40  [INFO   ]  __main__  —  Accediendo a century21  [https://c21.com.bo/]
+2026-04-03 21:42:40  [INFO   ]  __main__  —  Accediendo a alfa  [https://www.alfabolivia.com/]
+2026-04-03 21:42:46  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:46  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'toqueeltimbre' (intento 1)
+2026-04-03 21:42:46  [INFO   ]  __main__  —  Accediendo a jhely  [https://jhely.com/]
+2026-04-03 21:42:49  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:49  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'century21' (intento 1)
+2026-04-03 21:42:49  [INFO   ]  __main__  —  Accediendo a santacruz_br  [https://santacruzbienesraices.com/]
+2026-04-03 21:42:51  [ERROR  ]  __main__  —  Fallo al procesar remax (https://www.remax.com.bo/)
+Traceback (most recent call last):
+  File "/home/alex/scrapper/scraper/runner.py", line 52, in _scrape_sitio
+    await page.goto(sitio.url, wait_until="domcontentloaded", timeout=30_000)
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 9045, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 153, in goto
+    await self._channel.send(
+        "goto", self._navigation_timeout, locals_to_params(locals())
+    )
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.remax.com.bo/
+Call log:
+  - navigating to "https://www.remax.com.bo/", waiting until "domcontentloaded"
+
+2026-04-03 21:42:51  [INFO   ]  __main__  —  Accediendo a bolivian_re  [https://bolivianrealestate.com.bo/]
+2026-04-03 21:42:54  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:54  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'alfa' (intento 1)
+2026-04-03 21:42:54  [INFO   ]  __main__  —  Accediendo a bienesraicesbo  [https://bienesraicesbo.com/]
+2026-04-03 21:42:56  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:42:56  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'jhely' (intento 1)
+2026-04-03 21:42:56  [INFO   ]  __main__  —  Accediendo a vision  [https://www.vision.com.bo/]
+2026-04-03 21:43:00  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:00  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'bolivian_re' (intento 1)
+2026-04-03 21:43:00  [INFO   ]  __main__  —  Accediendo a procasa  [https://procasabolivia.com/]
+2026-04-03 21:43:02  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:02  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'bienesraicesbo' (intento 1)
+2026-04-03 21:43:02  [INFO   ]  __main__  —  Accediendo a casadepto  [http://www.casadepto.com/]
+2026-04-03 21:43:05  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:05  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'vision' (intento 1)
+2026-04-03 21:43:07  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:07  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'santacruz_br' (intento 1)
+2026-04-03 21:43:07  [ERROR  ]  __main__  —  Fallo al procesar casadepto (http://www.casadepto.com/)
+Traceback (most recent call last):
+  File "/home/alex/scrapper/scraper/runner.py", line 52, in _scrape_sitio
+    await page.goto(sitio.url, wait_until="domcontentloaded", timeout=30_000)
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 9045, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 153, in goto
+    await self._channel.send(
+        "goto", self._navigation_timeout, locals_to_params(locals())
+    )
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/alex/scrapper/.venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_NAME_NOT_RESOLVED at http://www.casadepto.com/
+Call log:
+  - navigating to "http://www.casadepto.com/", waiting until "domcontentloaded"
+
+2026-04-03 21:43:07  [INFO   ]  __main__  —  Accediendo a ultracasas  [https://www.ultracasas.com/inmobiliarias]
+2026-04-03 21:43:10  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:10  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'procasa' (intento 1)
+2026-04-03 21:43:15  [INFO   ]  httpx  —  HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-03 21:43:15  [INFO   ]  scraper.llm  —  7 reglas inferidas por LLM para 'ultracasas' (intento 1)
+2026-04-03 21:43:16  [INFO   ]  scraper.pool  —  Navegador cerrado correctamente
+2026-04-03 21:43:16  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 1.0s
+2026-04-03 21:43:17  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 2.0s
+2026-04-03 21:43:19  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 4.0s
+2026-04-03 21:43:23  [ERROR  ]  scraper.cliente  —  Propiedad no enviada tras 3 intentos — https://www.infocasas.com.bo/
+2026-04-03 21:43:23  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — infocasas_7c514566-bcb8-47ba-bca7-e6ca98c96a0a.json  [https://www.infocasas.com.bo/]
+2026-04-03 21:43:23  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 1.0s
+2026-04-03 21:43:24  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 2.0s
+2026-04-03 21:43:26  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 4.0s
+2026-04-03 21:43:30  [ERROR  ]  scraper.cliente  —  Propiedad no enviada tras 3 intentos — https://bolivia.buscocasita.com/
+2026-04-03 21:43:30  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — buscocasita_d95d2c39-b57e-4471-ba10-eae044bbc59a.json  [https://bolivia.buscocasita.com/]
+2026-04-03 21:43:30  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 1.0s
+2026-04-03 21:43:31  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 2.0s
+2026-04-03 21:43:33  [WARNING]  scraper.cliente  —  Sin conexión al monolito — reintentando en 4.0s
+2026-04-03 21:43:37  [ERROR  ]  scraper.cliente  —  Propiedad no enviada tras 3 intentos — https://toqueeltimbre.com/
+2026-04-03 21:43:37  [WARNING]  scraper.cliente  —  🔴 Circuit breaker ABIERTO — monolito inaccesible. Propiedades irán a disco por 60s.
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — toqueeltimbre_aa3d3b5e-8ab5-46a5-baf4-02e7b0e6ad64.json  [https://toqueeltimbre.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — slideprop_e6342e7a-725f-439c-ad41-3ea21bb483e0.json  [https://bolivia.slideprop.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — century21_7b9b60d7-7c6d-4555-b1a7-72102b04cdb2.json  [https://c21.com.bo/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — alfa_4449c156-c5fb-4ad1-9b76-22eabd948cbb.json  [https://www.alfabolivia.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — jhely_9af177c0-e65c-44cd-89ce-0ed7ae108bdc.json  [https://jhely.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — santacruz_br_63f94c89-f320-4514-84e5-652aa06f67fb.json  [https://santacruzbienesraices.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — bolivian_re_ec67f427-2b4e-4425-8598-0f5c5f3e5b73.json  [https://bolivianrealestate.com.bo/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — bienesraicesbo_cae8f259-a3e6-487d-ab6f-e487b95cae25.json  [https://bienesraicesbo.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — vision_74f59567-344a-42a8-abd8-25748f9ccddd.json  [https://www.vision.com.bo/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — procasa_9318026a-c7f8-45c8-b3cd-0c01069c2a13.json  [https://procasabolivia.com/]
+2026-04-03 21:43:37  [INFO   ]  scraper.cliente  —  Propiedad guardada localmente — ultracasas_4bc89b62-79a2-4331-be5f-623fed95e7e9.json  [https://www.ultracasas.com/inmobiliarias]
+2026-04-03 21:43:37  [INFO   ]  __main__  —  Ronda completada — 13 propiedades procesadas
+2026-04-03 21:43:37  [INFO   ]  __main__  —  Ciclo 1 finalizado — 13 propiedades obtenidas
+2026-04-03 21:43:37  [INFO   ]  __main__  —  Próximo ciclo en 60 segundos

@@ -1,0 +1,6 @@
+(define (aplicar campos)
+  (let ((lat (hash-try-get campos "lat"))
+        (lng (hash-try-get campos "lng")))
+    (if (and lat lng)
+      (hash-insert campos "geo_confianza" "leaflet")
+      campos)))
